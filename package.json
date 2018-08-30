@@ -1,0 +1,15 @@
+{
+  "name": "study_pi_web",
+  "version": "0.0.1",
+  "description": "An individual assignment for students of the Web Programming course",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "^4.9.1"
+  },
+  "scripts": {
+    "test": "\"\"node_modules/.bin/tape\"\" homework1/*.js homework2/*.js homework3/*.js"
+  },
+  "author": "Aleksandr Chermenin",
+  "license": "MIT"
+}
