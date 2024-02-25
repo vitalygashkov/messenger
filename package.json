@@ -1,15 +1,20 @@
 {
-  "name": "study_pi_web",
-  "version": "0.0.1",
-  "description": "An individual assignment for students of the Web Programming course",
+  "name": "study_pi_web_chat",
+  "version": "1.0",
+  "description": "A simple implementation of a chat using sockets",
   "main": "index.js",
-  "dependencies": {},
-  "devDependencies": {
-    "tape": "^4.9.1"
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongodb": "^2.2.33",
+    "pg": "^7.4.3",
+    "redis": "^2.8.0",
+    "socket.io": "^2.2.0"
   },
+  "devDependencies": {},
   "scripts": {
-    "test": "\"\"node_modules/.bin/tape\"\" homework1/*.js homework2/*.js homework3/*.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "author": "Aleksandr Chermenin",
+  "author": "Gashkov Vitaliy",
   "license": "MIT"
 }

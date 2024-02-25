@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Live Chat App</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+
+        <style>
+            :root {
+                --input-padding-x: 1.5rem;
+                --input-padding-y: .75rem;
+            }
+            body {
+                /*background: #007bff;*/
+                background: #6dd5ed;
+                background: linear-gradient(to right, #2193b0, #6dd5ed);
+            }
+            .card-signin {
+                border: 0;
+                border-radius: 1rem;
+                box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+            }
+            .card-signin .card-title {
+                margin-bottom: 2rem;
+                font-weight: 300;
+                font-size: 1.5rem;
+            }
+            .card-signin .card-body {
+                padding: 2rem;
+            }
+            .form-signin {
+                width: 100%;
+            }
+            .form-signin .btn {
+                font-size: 80%;
+                border-radius: 5rem;
+                letter-spacing: .1rem;
+                font-weight: bold;
+                padding: 1rem;
+                transition: all 0.2s;
+            }
+            .form-label-group {
+                position: relative;
+                margin-bottom: 1rem;
+            }
+            .form-label-group input {
+                height: auto;
+                border-radius: 2rem;
+            }
+            .form-label-group>input,
+            .form-label-group>label {
+                padding: var(--input-padding-y) var(--input-padding-x);
+            }
+            .form-label-group>label {
+                position: absolute;
+                top: 0;
+                left: 0;
+                display: block;
+                width: 100%;
+                margin-bottom: 0;
+                /* Override default `<label>` margin */
+                line-height: 1.5;
+                color: #495057;
+                border: 1px solid transparent;
+                border-radius: .25rem;
+                transition: all .1s ease-in-out;
+            }
+            .form-label-group input::-webkit-input-placeholder {
+                color: transparent;
+            }
+            .form-label-group input:-ms-input-placeholder {
+                color: transparent;
+            }
+            .form-label-group input::-ms-input-placeholder {
+                color: transparent;
+            }
+            .form-label-group input::-moz-placeholder {
+                color: transparent;
+            }
+            .form-label-group input::placeholder {
+                color: transparent;
+            }
+            .form-label-group input:not(:placeholder-shown) {
+                padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
+                padding-bottom: calc(var(--input-padding-y) / 3);
+            }
+            .form-label-group input:not(:placeholder-shown)~label {
+                padding-top: calc(var(--input-padding-y) / 3);
+                padding-bottom: calc(var(--input-padding-y) / 3);
+                font-size: 12px;
+                color: #777;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="sign_in" class="container">
+            <div class="row">
+                <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+
+                    <!--  Login Form  -->
+
+                    <div class="card card-signin my-5">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">Sign In</h5>
+                            <form class="form-signin">
+                                <div class="form-label-group">
+                                    <input type="text" id="username" class="form-control" placeholder="Login"
+                                           data-toggle="popover" data-content="Incorrect login or password" data-placement="left"
+                                           required autofocus autocomplete="off">
+                                    <label for="username">Login</label>
+                                </div>
+                                <div class="form-label-group">
+                                    <input type="password" id="pass" class="form-control" placeholder="Password" required autocomplete="off">
+                                    <label for="pass">Password</label>
+                                </div>
+                                <button id="loginBtn" class="btn btn-lg btn-dark btn-block text-uppercase" type="button" onclick="join('loginBtn')">Sign in</button>
+                                <hr class="my-4">
+                                <button id="registerBtn" class="btn btn-lg btn-warning btn-block text-uppercase" type="button" onclick="join('registerBtn')">Sign up</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="chat" class="container" style="display:none">
+            <div class="card border-0 shadow my-5">
+                <div class="card-body p-0">
+                    <div id="panel" class="panel panel-default" style="height: 80%">
+
+                        <!--  Head  -->
+
+                        <div class="panel-heading p-3">
+                            Chat
+                            <p id="status" class="media-body pb-3 mb-0 border-bottom border-dark-gray" style="font-size: 70%; color: gray">
+                                Version 1.0
+                            </p>
+                        </div>
+
+                        <!--  Messages  -->
+
+                        <div id="messages-panel" class="panel-body fixed-panel" style="height: calc(100vh - 250px); overflow-y: scroll">
+                            <div id="messages" class="bd-example p-4" style="font-size: 90%; color: #232123">
+
+                            </div>
+                        </div>
+
+                        <!--  Input  -->
+
+                        <div class="panel-footer">
+                            <div class="input-group mb-0 input-group-lg border-top">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-light border-0" type="button">
+                                        <i class="fa fa-paperclip" style="color:darkgray"></i>
+                                    </button>
+                                </div>
+
+                                <input type="text" id="input" class="form-control border-0" style="font-size: small" placeholder="Write a message..." autofocus autocomplete="off">
+
+                                <div class="input-group-append">
+                                    <button id="clear" class="btn btn-light border-0">
+                                        <i class="fa fa-eraser" style="color:darkgray"></i>
+                                    </button>
+                                    <button id="sendButton" class="btn btn-light border-0" type="button" onclick="sendMsg()">
+                                        <i class="fa fa-paper-plane" style="color:deepskyblue"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <script>
+
+        const socket = io.connect('http://127.0.0.1:3000');
+
+        var element = function(id){
+            return document.getElementById(id);
+        };
+
+        // Get Elements
+        const
+            messages = element('messages'),
+            username = element('username'),
+            pass = element('pass'),
+            input = element('input'),
+            clearBtn = element('clear'),
+            msgPanel = $("#messages-panel"),
+            lgInput = $('#username'),
+            lgForm = $('.form-signin'),
+            lgBtn = $("#loginBtn"),
+            msgInput = $('.input-group');
+            sendBtn = $('#sendButton');
+
+
+        // Handle Enter Press at Login
+        $(function(){
+            lgForm.keypress(function(e){
+                if(e.which === 13) {
+                    lgBtn.click();
+                }
+            })
+        });
+
+        // Handle Enter Press in the Message Field
+        $(function(){
+            msgInput.keypress(function(e){
+                if(e.which === 13) {
+                    sendBtn.click();
+                }
+            })
+        });
+
+        // Handle new connected user
+        function join(idBtn) {
+            socket.emit('join', {
+                name:username.value,
+                pass:pass.value,
+                btn: idBtn
+            });
+        }
+
+        // Handle Click Send Button
+        function sendMsg() {
+            socket.emit('input', {
+                message:input.value,
+                name:username.value
+            });
+            input.value = '';
+        }
+
+        (function(){
+            // Check for connection
+            if(socket !== undefined){
+                // Handle messages output
+                socket.on('output', function(data){
+                    if(data.length){
+                        for(var x = 0;x < data.length;x++){
+                            // Build out message in chat
+                            messages.insertAdjacentHTML('beforeend',
+                                `<dt style="font-size: small">${data[x].name}</dt><dd>${data[x].message}</dd>`);
+                            msgPanel.stop().animate({ scrollTop: msgPanel[0].scrollHeight}, 300);
+                        }
+                    }
+                });
+
+                // Handle user info
+                socket.on('auth', function(data) {
+                    if (data.length === 0) {
+                        //lgInput.prop('data-content', 'test');
+
+                        lgInput.popover('show');
+                    } else {
+                        lgInput.popover('hide');
+                        document.getElementById('sign_in').style.display = "none";
+                        document.getElementById('chat').style.display = "block";
+                    }
+                });
+
+                // Get status from server
+                socket.on('status', function(s){
+                    messages.insertAdjacentHTML('beforeend',
+                        `<div style="text-align: center;"><span class="badge badge-pill badge-light" style="color: gray">${s}</span></div>`);
+                    msgPanel.stop().animate({ scrollTop: msgPanel[0].scrollHeight}, 1);
+                });
+
+                // Handle Chat Clear
+                clearBtn.addEventListener('click', function(){
+                    socket.emit('clear');
+                });
+
+                // Clear Chat History
+                socket.on('cleared', function(){
+                    messages.textContent = '';
+                });
+            }
+        })();
+    </script>
+</html>
